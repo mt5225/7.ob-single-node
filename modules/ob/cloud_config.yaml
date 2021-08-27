@@ -4,11 +4,11 @@ packages:
   - git
   - mysql
   - jq
-  - htop
 runcmd:
   - sudo yum-config-manager --add-repo https://mirrors.aliyun.com/oceanbase/OceanBase.repo
   - sudo yum install -y ob-deploy
-  - source /etc/profile.d/obd.sh
-  - git clone https://github.com/oceanbase/obdeploy.git
-  - obd cluster deploy c1 -c ./obdeploy/example/mini-local-example.yaml
-  - obd cluster start c1
+  - sysctl -w fs.aio-max-nr=1048576 && sysctl -p
+  - sysctl -w fs.file-max=655350 && sysctl -p
+  - cd /root && git clone https://github.com/oceanbase/obdeploy.git
+  - source /etc/profile.d/obd.sh && obd cluster deploy c1 -c /root/obdeploy/example/mini-local-example.yaml && ulimit -n 655350 && obd cluster start c1 > /root/log.log
+  - obd cluster list > /root/log.log
