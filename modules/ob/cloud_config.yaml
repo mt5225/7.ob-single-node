@@ -1,0 +1,14 @@
+#cloud-config
+packages:
+  - yum-utils
+  - git
+  - mysql
+  - jq
+  - htop
+runcmd:
+  - sudo yum-config-manager --add-repo https://mirrors.aliyun.com/oceanbase/OceanBase.repo
+  - sudo yum install -y ob-deploy
+  - source /etc/profile.d/obd.sh
+  - git clone https://github.com/oceanbase/obdeploy.git
+  - obd cluster deploy c1 -c ./obdeploy/example/mini-local-example.yaml
+  - obd cluster start c1
