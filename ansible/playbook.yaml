@@ -1,0 +1,33 @@
+---
+- hosts: obsvr 
+  remote_user: "{{ ansible_user }}"
+  gather_facts: no
+  become: true
+
+  tasks:
+    - name: Wait 300 seconds, but only start checking after 20 seconds
+      wait_for_connection:
+        delay: 20
+        timeout: 300
+    - name: install packages
+      yum:
+        name: 
+          - git
+          - python3
+          - yum-utils
+          - mysql
+    - name: checkout
+      ansible.builtin.git:
+        repo: https://github.com/oceanbase/obdeploy.git
+        dest: /root/obdeploy
+    - name: repo 
+      command: yum-config-manager --add-repo https://mirrors.aliyun.com/oceanbase/OceanBase.repo 
+    - name: install ob 
+      yum:
+        name: ob-deploy
+    - name: deploy
+      command: obd cluster deploy c1 -c /root/obdeploy/example/mini-local-example.yaml
+    - name: cluster list
+      command: obd cluster list 
+      register: out
+    - debug: var=out.stdout_lines

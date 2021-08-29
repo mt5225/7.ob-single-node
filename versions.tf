@@ -13,5 +13,9 @@ terraform {
       source  = "hashicorp/cloudinit"
       version = "~> 2.1"
     }
+    ansible = {
+      source  = "nbering/ansible"
+      version = "1.0.4"
+    }
   }
 }

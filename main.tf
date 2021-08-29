@@ -11,3 +11,11 @@ module "networking" {
   source    = "./modules/networking" #A
   namespace = var.namespace          #B
 }
+
+resource "ansible_host" "obsvr" {
+  inventory_hostname = module.obsvr.public_ip
+  groups             = ["obsvr"]
+  vars = {
+    ansible_user = "centos"
+  }
+}

@@ -1,12 +1,3 @@
-data "cloudinit_config" "config" {
-  gzip          = true
-  base64_encode = true
-  part {
-    content_type = "text/cloud-config"
-    content      = file("${path.module}/cloud_config.yaml")
-  }
-}
-
 module "iam_instance_profile" {
   source  = "../aws-base/terraform-aws-iip"
   actions = ["logs:*", "rds:*"]
@@ -23,7 +14,6 @@ module "ob" {
   subnet_id                   = var.vpc.public_subnets[0]
   iam_instance_profile        = module.iam_instance_profile.name
   associate_public_ip_address = true
-  user_data_base64            = data.cloudinit_config.config.rendered
 
   tags = {
     Terraform   = "true"
