@@ -17,7 +17,7 @@
           - yum-utils
           - mysql
     - name: checkout
-      ansible.builtin.git:
+      git:
         repo: https://github.com/oceanbase/obdeploy.git
         dest: /root/obdeploy
     - name: repo 
